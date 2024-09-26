@@ -4,6 +4,29 @@ import { RenderBuilderContent } from "../../components/builder";
 // Builder Public API Key set in .env file
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY);
 
+export async function generateMetadata({ params }) {
+  const builderModelName = "page";
+
+  const pageData = await builder
+    // Get the page content from Builder with the specified options
+    .get(builderModelName, {
+      userAttributes: {
+        // Use the page path specified in the URL to fetch the content
+        urlPath: "/" + (params?.page?.join("/") || ""),
+      },
+      prerender: false,
+      staleCacheSeconds: 400,
+    })
+    // Convert the result to a promise
+    .toPromise();
+
+    function toTitleCase(str) { return str.replace(/\b\w/g, (char) => char.toUpperCase()); }
+
+    return {
+      title: `${toTitleCase(pageData.data.title)} | Sarah Knego`,
+    }
+}
+
 export default async function Page(props) {
   const builderModelName = "page";
 
@@ -15,6 +38,7 @@ export default async function Page(props) {
         urlPath: "/" + (props?.params?.page?.join("/") || ""),
       },
       prerender: false,
+      staleCacheSeconds: 400,
     })
     // Convert the result to a promise
     .toPromise();
