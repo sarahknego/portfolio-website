@@ -30,12 +30,13 @@ export default async function Page(props) {
     .toPromise();
 
     const content = await builder
+    
     // Get the page content from Builder with the specified options
     .get("project", {
       prerender: false,
       staleCacheSeconds: 400,
     })
-    
+
     // Convert the result to a promise
     .toPromise();
 
