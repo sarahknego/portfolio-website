@@ -1,4 +1,5 @@
 import { builder } from "@builder.io/sdk";
+import { RenderBuilderContent } from "@/components/builder";
 import parse from 'html-react-parser';
 import sanitizeHtml from "sanitize-html";
 
@@ -16,9 +17,7 @@ builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY);
 export default async function Page(props) {
     const builderModelName = "projects";
 
-    console.log(props)
-
-    const content = await builder 
+    const data = await builder 
     .get(builderModelName, {
         staleCacheSeconds: 400,
         query: {
@@ -28,15 +27,21 @@ export default async function Page(props) {
         },
     })
 
-
     .toPromise();
 
-    console.log(content)
+    const content = await builder
+    // Get the page content from Builder with the specified options
+    .get("project", {
+      prerender: false,
+      staleCacheSeconds: 400,
+    })
+    // Convert the result to a promise
+    .toPromise();
+
     return (
         <>
         {/* Render the Builder page */}
-        <h1>{content.data.projectName}</h1>
-        <div>{parse(sanitizeHtml(content.data.description)) || "No description provided"}</div>
+        <RenderBuilderContent content={content} model={"project"} data={data.data} />
         </>
     )
 }
