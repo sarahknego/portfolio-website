@@ -35,6 +35,7 @@ export default async function Page(props) {
       prerender: false,
       staleCacheSeconds: 400,
     })
+    
     // Convert the result to a promise
     .toPromise();
 
