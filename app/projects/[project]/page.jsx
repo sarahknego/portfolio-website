@@ -59,6 +59,7 @@ export default async function Page(props) {
 
     // Get the page content from Builder with the specified options
     .get("project", {
+      cachebust: true,
       prerender: false,
       staleCacheSeconds: 400,
     })
