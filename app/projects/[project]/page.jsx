@@ -9,6 +9,7 @@ export async function generateMetadata({ params }) {
     const projectData = await builder
       // Get the page content from Builder with the specified options
       .get(builderModelName, {
+        cachebust: true,
         userAttributes: {
           // Use the page path specified in the URL to fetch the content
           urlPath: "/projects/" + (params?.page?.join("/") || ""),
@@ -43,6 +44,7 @@ export default async function Page(props) {
 
     const data = await builder 
     .get(builderModelName, {
+        cachebust: true,
         staleCacheSeconds: 400,
         query: {
             data: {

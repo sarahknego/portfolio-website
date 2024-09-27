@@ -16,6 +16,7 @@ export default async function Home() {
   const content = await builder
     // Get the page content from Builder with the specified options
     .get(builderModelName, {
+      cachebust: true,
       userAttributes: {
         // Use the page path specified in the URL to fetch the content
         urlPath: "/" 

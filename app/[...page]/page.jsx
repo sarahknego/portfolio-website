@@ -10,6 +10,7 @@ export async function generateMetadata({ params }) {
   const pageData = await builder
     // Get the page content from Builder with the specified options
     .get(builderModelName, {
+      cachebust: true,
       userAttributes: {
         // Use the page path specified in the URL to fetch the content
         urlPath: "/" + (params?.page?.join("/") || ""),
@@ -33,6 +34,7 @@ export default async function Page(props) {
   const content = await builder
     // Get the page content from Builder with the specified options
     .get(builderModelName, {
+      cachebust: true,
       userAttributes: {
         // Use the page path specified in the URL to fetch the content
         urlPath: "/" + (props?.params?.page?.join("/") || ""),
@@ -42,6 +44,8 @@ export default async function Page(props) {
     })
     // Convert the result to a promise
     .toPromise();
+
+    console.log(content);
 
   return (
     <>
