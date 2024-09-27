@@ -1,5 +1,4 @@
 import { builder } from "@builder.io/sdk";
-import { BuilderContent } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 import parse from 'html-react-parser';
 import sanitizeHtml from "sanitize-html";
