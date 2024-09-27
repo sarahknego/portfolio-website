@@ -21,6 +21,7 @@ export default async function Home() {
         urlPath: "/" 
       },
       prerender: false,
+      staleCacheSeconds: 400,
     })
     // Convert the result to a promise
     .toPromise();
