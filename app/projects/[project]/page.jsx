@@ -50,7 +50,7 @@ export default async function Page(props) {
       staleCacheSeconds: 400,
       query: {
         data: {
-            slug: props.params.project,
+            slug: props.params.project, 
         }
     },
     })
