@@ -12,10 +12,11 @@ export async function generateMetadata({ params }) {
       // Get the page content from Builder with the specified options
       .get(builderModelName, {
         cachebust: true,
-        userAttributes: {
-          // Use the page path specified in the URL to fetch the content
-          urlPath: "/projects/" + (params?.page?.join("/") || ""),
-        },
+        query: {
+          data: {
+              slug: params.project,
+          }
+      },
         prerender: false,
         staleCacheSeconds: 400,
       })
