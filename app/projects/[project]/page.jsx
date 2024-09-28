@@ -3,8 +3,10 @@ import { RenderBuilderContent } from "@/components/builder";
 import parse from 'html-react-parser';
 import sanitizeHtml from "sanitize-html";
 
+builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY);
+
 export async function generateMetadata({ params }) {
-    const builderModelName = "projects";
+    const builderModelName = "project";
   
     const projectData = await builder
       // Get the page content from Builder with the specified options
@@ -26,10 +28,9 @@ export async function generateMetadata({ params }) {
         title: `${toTitleCase(projectData.data.projectName)} | Sarah Knego`,
       }
   }
-  
 
 export async function getStaticParams() {
-    const data = await builder.getAll("projects")
+    const data = await builder.getAll("project")
     return (
         data.map((project) => {
             return {id: project.data.slug}
@@ -37,24 +38,8 @@ export async function getStaticParams() {
     )
 }
 
-builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY);
-
 export default async function Page(props) {
-    const builderModelName = "projects";
-
-    const data = await builder 
-    .get(builderModelName, {
-        cachebust: true,
-        staleCacheSeconds: 400,
-        query: {
-            data: {
-                slug: props.params.project,
-            }
-        },
-    })
-
-    .toPromise();
-
+    const builderModelName = "project";
     const content = await builder
 
     // Get the page content from Builder with the specified options
@@ -62,6 +47,11 @@ export default async function Page(props) {
       cachebust: true,
       prerender: false, 
       staleCacheSeconds: 400,
+      query: {
+        data: {
+            slug: props.params.project,
+        }
+    },
     })
 
     // Convert the result to a promise
@@ -70,7 +60,7 @@ export default async function Page(props) {
     return (
         <>
         {/* Render the Builder page */}
-        <RenderBuilderContent content={content} model={"project"} data={data.data} />
+        <RenderBuilderContent content={content} model={"project"} />
         </>
     )
 }
