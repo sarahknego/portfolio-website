@@ -38,7 +38,7 @@ export async function getStaticParams() {
     const data = await builder.getAll("project")
     return (
         data.map((project) => {
-            return {id: project.data.slug}
+            return {project: project.data.slug}
         })
     )
 }
