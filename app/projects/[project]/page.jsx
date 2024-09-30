@@ -1,7 +1,5 @@
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
-import parse from 'html-react-parser';
-import sanitizeHtml from "sanitize-html";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY);
 
@@ -24,9 +22,15 @@ export async function generateMetadata({ params }) {
       .toPromise();
   
       function toTitleCase(str) { return str.replace(/\b\w/g, (char) => char.toUpperCase()); }
+
+      if (!projectData) {
+        return {
+          title: "Project | Sarah Knego",
+        };
+      }
   
       return {
-        title: `${toTitleCase(projectData.data.projectName)} | Sarah Knego`,
+        title: `${toTitleCase(projectData?.data?.projectName)} | Sarah Knego`,
       }
   }
 
@@ -41,22 +45,27 @@ export async function getStaticParams() {
 
 export default async function Page(props) {
     const builderModelName = "project";
-    const content = await builder
+    let content;
 
-    // Get the page content from Builder with the specified options
-    .get("project", {
-      cachebust: true,
-      prerender: false, 
-      staleCacheSeconds: 400,
-      query: {
-        data: {
-            slug: props.params.project, 
-        }
-    },
-    })
+    try {
+        content = await builder
+            .get(builderModelName, {
+                cachebust: true,
+                prerender: false, 
+                staleCacheSeconds: 400,
+                query: {
+                    data: {
+                        slug: props.params.project, 
+                    }
+                },
+            })
+            .toPromise();
+    } catch (error) {
+        console.error("Error fetching content from Builder.io:", error);
+        return <div>Error loading page content: - {props.params.project} - . Please try again later.</div>;
+    }
 
     // Convert the result to a promise
-    .toPromise();
 
     return (
         <>
@@ -65,4 +74,5 @@ export default async function Page(props) {
         </>
     )
 }
+
 
