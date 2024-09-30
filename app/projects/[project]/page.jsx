@@ -41,7 +41,7 @@ export async function getStaticParams() {
             return {project: project.data.slug}
         })
     )
-}
+} 
 
 export default async function Page(props) {
     const builderModelName = "project";
